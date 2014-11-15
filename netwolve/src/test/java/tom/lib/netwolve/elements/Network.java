@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import com.google.common.primitives.Floats;
 
+import tom.lib.netwolve.MathUtils;
 import tom.lib.netwolve.interfaces.Transformation;
 
 public class Network extends Transformation {
@@ -13,6 +14,28 @@ public class Network extends Transformation {
 	private Transformation[] inputs;
 	private HashMap<Transformation, Transformation[]> nodes;
 	private Transformation[] outputs;
+	
+	public Network(Transformation[] inputs, Transformation[] inners, int nbOutput, double txCon) {
+		assert(nbOutput <= inners.length);
+		this.inputs = inputs;
+		nodes = new HashMap<Transformation, Transformation[]>();
+		for (Transformation transformation : inners) {
+			ArrayList<Transformation> liste = new ArrayList<Transformation>();
+			for (Transformation lien : inners) {
+				if (MathUtils.hasard(txCon))
+					liste.add(lien);
+			}
+			for (Transformation lien : inners) {
+				if (MathUtils.hasard(txCon))
+					liste.add(lien);
+			}
+			nodes.put(transformation, liste.toArray(new Transformation[]{}));
+		}
+		outputs = new Transformation[nbOutput];
+		for (int i = 0; i < nbOutput; i++) {
+			outputs[i] = inners[i];
+		}
+	}
 	
 	public float[] eval() {
 		HashMap<Transformation, float[]> majsNodes = new HashMap<>();
