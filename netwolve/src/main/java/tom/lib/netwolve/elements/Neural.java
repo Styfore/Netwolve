@@ -21,7 +21,7 @@ public class Neural extends Transformation {
 	@Override
 	public float[] eval(float[] inputs) {
 		int n = Math.min(inputs.length, weights.length);
-		float r = -bias;
+		float r = bias;
 		for (int i = 0; i < n; i++) {
 			r = r + weights[i]*inputs[i];
 		}

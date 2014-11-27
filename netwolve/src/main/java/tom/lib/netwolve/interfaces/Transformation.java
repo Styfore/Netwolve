@@ -2,7 +2,7 @@ package tom.lib.netwolve.interfaces;
 
 public abstract class Transformation {
 
-	protected float[] lastEval;
+	protected float[] lastEval = new float[]{};
 	public abstract float[] eval(float[] inputs);
 	
 	public void setLastEval(float[] lastEval) {
