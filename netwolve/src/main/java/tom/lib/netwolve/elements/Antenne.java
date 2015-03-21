@@ -2,9 +2,7 @@ package tom.lib.netwolve.elements;
 
 import java.util.Arrays;
 
-import tom.lib.netwolve.interfaces.Transformation;
-
-public class Antenne extends Transformation {
+public class Antenne  {
 
 	private float x;
 	private float y;
@@ -21,7 +19,6 @@ public class Antenne extends Transformation {
 		Arrays.fill(lengths, 1f/length);
 	}
 	
-	@Override
 	public float[] eval(float[] inputs) {
 		float[] capteurs = new float[lengths.length];
 		Arrays.fill(capteurs, 0);

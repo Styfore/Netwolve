@@ -2,75 +2,90 @@ package tom.lib.netwolve.elements;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
-import com.google.common.primitives.Floats;
-
 import tom.lib.netwolve.MathUtils;
-import tom.lib.netwolve.interfaces.Transformation;
+import tom.lib.netwolve.interfaces.Provider;
 
-public class Network extends Transformation {
+public class Network {
 
-	private Transformation[] inputs;
-	private HashMap<Transformation, Transformation[]> nodes;
-	private Transformation[] outputs;
+	private Provider[] inputs;
+	private HashMap<Neuron, Provider[]> nodes;
+	private Neuron[] outputs;
 	
-	public Network(Transformation[] inputs, Transformation[] inners, int nbOutput, double txCon) {
+	public Network(Provider[] inputs, Neuron[] inners, int nbOutput, double txCon) {
 		assert(nbOutput <= inners.length);
 		this.inputs = inputs;
-		nodes = new HashMap<Transformation, Transformation[]>();
-		for (Transformation transformation : inners) {
-			ArrayList<Transformation> liste = new ArrayList<Transformation>();
-			for (Transformation lien : inners) {
+		nodes = new HashMap<Neuron, Provider[]>();
+		for (Neuron neurone : inners) {
+			ArrayList<Provider> liste = new ArrayList<Provider>();
+			for (Neuron lien : inners) {
 				if (MathUtils.hasard(txCon))
 					liste.add(lien);
 			}
-			for (Transformation lien : inners) {
+			for (Provider lien : this.inputs) {
 				if (MathUtils.hasard(txCon))
 					liste.add(lien);
 			}
-			nodes.put(transformation, liste.toArray(new Transformation[]{}));
+			nodes.put(neurone, liste.toArray(new Neuron[]{}));
 		}
-		outputs = new Transformation[nbOutput];
-		for (int i = 0; i < nbOutput; i++) {
-			outputs[i] = inners[i];
-		}
+		outputs = new Neuron[nbOutput];
+		System.arraycopy(inners, 0, outputs, 0, nbOutput);
 	}
-	
-	public float[] eval() {
-		HashMap<Transformation, float[]> majsNodes = new HashMap<>();
-		for (Entry<Transformation, Transformation[]> entry : nodes.entrySet()) {
-			Transformation key = entry.getKey();
-			Transformation[] value = entry.getValue();
-			
-			ArrayList<Float> inputList = new ArrayList<>();
-			for (Transformation transformation : value) {
-				inputList.addAll(Floats.asList(transformation.getLastEval()));
-			}
-			majsNodes.put(key, key.eval(Floats.toArray(inputList)));
-		}
-		
-		for (Entry<Transformation, float[]> entry : majsNodes.entrySet()) {
-			Transformation key = entry.getKey();
-			float[] value = entry.getValue();
-			key.setLastEval(value);
-		}
 
-		ArrayList<Float> outputList = new ArrayList<>();
-		for (Transformation transformation : this.outputs) {
-			outputList.addAll(Floats.asList(transformation.getLastEval()));
+	public float[] eval() {
+		// Récupération des entrées de chaques neurones
+		Map<Neuron, float[]> toEval = new HashMap<>();
+		for (Entry<Neuron, Provider[]> entry : nodes.entrySet()) {
+			Neuron neuron = entry.getKey();
+			Provider[] providers = entry.getValue();
+			
+			float[] neuronInput = new float[providers.length];
+			for (int i = 0; i < neuronInput.length; i++) {
+				neuronInput[i] = providers[i].provide();
+			}
+			
+			toEval.put(neuron, neuronInput);
 		}
 		
-		return Floats.toArray(outputList);
+		// Evaluation des neurones
+		for (Entry<Neuron, float[]> entry : toEval.entrySet()) {
+			Neuron neural = entry.getKey();
+			float[] value = entry.getValue();
+			neural.eval(value);
+		}
+		
+		float[] networkOutput = new float[outputs.length];
+		for (int i = 0; i < outputs.length; i++) {
+			networkOutput[i] = outputs[i].provide();
+		}
+		
+		return networkOutput;
 	}
 	
-	@Override
-	public float[] eval(float[] inputs) {
-		for (Transformation t : this.inputs) {
-			t.setLastEval(inputs);
-		}
-		
-		return eval();
+	public Provider[] getInputs() {
+		return inputs;
+	}
+	
+	public HashMap<Neuron, Provider[]> getNodes() {
+		return nodes;
+	}
+	
+	public Neuron[] getOutputs() {
+		return outputs;
+	}
+	
+	public void setInputs(Provider[] inputs) {
+		this.inputs = inputs;
+	}
+	
+	public void setNodes(HashMap<Neuron, Provider[]> nodes) {
+		this.nodes = nodes;
+	}
+	
+	public void setOutputs(Neuron[] outputs) {
+		this.outputs = outputs;
 	}
 
 }
