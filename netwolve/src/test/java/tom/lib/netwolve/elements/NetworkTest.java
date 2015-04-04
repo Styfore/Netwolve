@@ -6,16 +6,17 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import tom.lib.netwolve.Function;
-import tom.lib.netwolve.MathUtils;
+import tom.lib.netwolve.services.Function;
+import tom.lib.netwolve.services.MathUtils;
 import tom.lib.netwolve.services.NetworkUtils;
 
 public class NetworkTest {
 
 	@Test
 	public void creationTest(){
-		Network network = new Network(10, 2, 3, 0.25, Function.SIGMOIDE);
+		Network network = new Network(5, 2, 1, 0.25, Function.SIGMOIDE);
 
+		NetworkUtils.exportToCsv("target/network.csv", network);
 		for (int i = 0; i < 5; i++) {
 			double[] in = new double[]{MathUtils.RANDOM.nextGaussian(), MathUtils.RANDOM.nextGaussian()};
 			System.out.print(Arrays.toString(in)  + " =>" );

@@ -2,25 +2,26 @@ package tom.lib.netwolve.elements;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import tom.lib.netwolve.ArrayUtils;
-import tom.lib.netwolve.Function;
-import tom.lib.netwolve.MathUtils;
+import tom.lib.netwolve.services.ArrayUtils;
+import tom.lib.netwolve.services.Function;
+import tom.lib.netwolve.services.MathUtils;
 
 public class Network {
 
 	private Function activationFunction;
 	
-	private int nbOutput;
 	private int nbInput;
+	private int nbOutput;
 
 	private double[] biases;
 	private double[] lambdas;
 
-	private Double[][] weights;
 	private Double[][] inputWeights;
+	private Double[][] weights;
 
 	private double[] lastEval;
 	
@@ -91,13 +92,13 @@ public class Network {
 		Set<Integer> inputs = new HashSet<>();
 		// Récupération des entrées, qui sont les premiers neurones à évaluer
 		for (int i = 0; i < inputWeights.length; i++) {
-			boolean isEntree = false;
+			boolean isInput = false;
 			int j = 0;
-			while (!isEntree && j < inputWeights[i].length) {
-				isEntree = isEntree || inputWeights[i][j] != null;
+			while (!isInput && j < inputWeights[i].length) {
+				isInput = inputWeights[i][j] != null;
 				j++;
 			}
-			if (isEntree){
+			if (isInput){
 				inputs.add(i);
 			}
 		}
@@ -110,11 +111,13 @@ public class Network {
 			
 			Set<Integer> layer = new HashSet<>();
 			for (int i = 0; i < networkSize; i++) {
-				for (Integer integer : previousLayer) {
-					if (weights[i][integer] != null){
-						layer.add(i);
-						break;
-					}
+				boolean isConnectedWithPrec = false;
+				Iterator<Integer> iterator = previousLayer.iterator();
+				while (!isConnectedWithPrec && iterator.hasNext()) {
+					isConnectedWithPrec = weights[i][iterator.next()] != null;
+				}
+				if(isConnectedWithPrec){
+					layer.add(i);
 				}
 			}
 			layer.removeAll(handledNeurons);

@@ -1,4 +1,4 @@
-package tom.lib.netwolve;
+package tom.lib.netwolve.services;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +10,14 @@ import tom.lib.netwolve.interfaces.Scorable;
 
 public class SelecteurUtils {
 
+	
+	
+	
+	
+	
+	
+	
+	
     public final static Comparator<Scorable> COMPARATOR = new Comparator<Scorable>() {
         @Override
         public int compare(Scorable o1, Scorable o2) {

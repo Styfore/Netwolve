@@ -1,10 +1,15 @@
 package tom.lib.netwolve.services;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import tom.lib.netwolve.MathUtils;
-import tom.lib.netwolve.ArrayUtils;
 import tom.lib.netwolve.elements.Network;
 
 public class NetworkUtils {
@@ -102,6 +107,32 @@ public class NetworkUtils {
 		network.calculateLayerOrder();
 	}
 
+	public static void exportToCsv(String pathFile, Network network){
+		Path path = Paths.get(pathFile);
+
+		// Ouverture d'un Writer en écriture :
+	    try ( BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8) ) {
+	        writer.write(network.getNbInput() + ";" + network.getNbOutput() + "\n");
+	        writer.write(Arrays.toString(network.getBiases()).replace("[", "").replace("]", "").replace(", ", ";") +"\n");
+	        writer.write(Arrays.toString(network.getLambdas()).replace("[", "").replace("]", "").replace(", ", ";") +"\n");
+	        writer.write(Arrays.toString(network.getLastEval()).replace("[", "").replace("]", "").replace(", ", ";") +"\n");
+	        
+	        writer.write("\n");
+	        
+	        for (int i = 0; i < network.getInputWeights().length; i++) {
+	        	writer.write(Arrays.toString(network.getInputWeights()[i]).replace("[", "").replace("]", "").replace(", ", ";") +"\n");
+			}
+	        writer.write("\n");
+	    	
+	        for (int i = 0; i < network.getWeights().length; i++) {
+	        	writer.write(Arrays.toString(network.getWeights()[i]).replace("[", "").replace("]", "").replace(", ", ";") +"\n");
+			}
+	        writer.write("\n");
+	    	
+	    } catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	private static void muterArray(Double[][] array, double gaussianSd, double weightMutationRate, double newLinkRate, double deleteLinkRate){
 		for (int i = 0; i < array.length; i++) {
@@ -132,5 +163,5 @@ public class NetworkUtils {
 			}
 		}
 	}
-	
+
 }
