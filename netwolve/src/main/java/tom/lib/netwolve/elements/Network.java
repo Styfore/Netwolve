@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import tom.lib.netwolve.ArrayUtils;
 import tom.lib.netwolve.Function;
 import tom.lib.netwolve.MathUtils;
 
@@ -59,6 +60,27 @@ public class Network {
 		}
 		
 		calculateLayerOrder();
+	}
+	
+	public Network(Network network){
+		this.activationFunction = network.activationFunction;
+		this.biases = network.biases.clone();
+		this.lambdas = network.lambdas.clone();
+
+		this.weights = ArrayUtils.copy(network.weights);
+		this.inputWeights = ArrayUtils.copy(network.inputWeights);
+
+		this.lastEval = network.lastEval.clone();
+		
+		this.nbOutput = network.nbOutput;
+		this.nbInput = network.nbInput;
+		
+		this.layerOrder = new ArrayList<>();
+		for (int i = 0; i < network.layerOrder.size(); i++) {
+			Set<Integer> set = new HashSet<>();
+			set.addAll(network.layerOrder.get(i));
+			this.layerOrder.add(set);
+		}
 	}
 	
 	public void calculateLayerOrder(){

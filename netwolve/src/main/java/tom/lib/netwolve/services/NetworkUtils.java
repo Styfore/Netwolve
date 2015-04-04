@@ -4,24 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tom.lib.netwolve.MathUtils;
-import tom.lib.netwolve.Utils;
+import tom.lib.netwolve.ArrayUtils;
 import tom.lib.netwolve.elements.Network;
 
-public class NetworkFactory {
+public class NetworkUtils {
 
+	private NetworkUtils() {}
+	
 	public static void mute(Network network, double gaussianSd, double weightMutationRate, double newLinkRate, double deleteLinkRate, double newNeuronRate, double deleteNeuronRate){
-		List<Double> lastEval = Utils.toList(network.getLastEval());
+		List<Double> lastEval = ArrayUtils.toList(network.getLastEval());
 		
-		List<Double> biases = Utils.toList(network.getBiases());
-		List<Double> lambdas = Utils.toList(network.getLambdas());
+		List<Double> biases = ArrayUtils.toList(network.getBiases());
+		List<Double> lambdas = ArrayUtils.toList(network.getLambdas());
 		
 		List<List<Double>> inputWeights = new ArrayList<>();
 		for (Double[] array : network.getInputWeights()) {
-			inputWeights.add(Utils.toList(array));
+			inputWeights.add(ArrayUtils.toList(array));
 		}
 		List<List<Double>> weights = new ArrayList<>();
 		for (Double[] array : network.getWeights()) {
-			weights.add(Utils.toList(array));
+			weights.add(ArrayUtils.toList(array));
 		}
 		
 		// Suppression des neurones
@@ -68,19 +70,19 @@ public class NetworkFactory {
 		}
 		
 		// On applique les changements des différentes supression/création dans le réseau
-		network.setLastEval(Utils.toPrimitiveArray(lastEval));
-		network.setBiases(Utils.toPrimitiveArray(biases));
-		network.setLambdas(Utils.toPrimitiveArray(lambdas));
+		network.setLastEval(ArrayUtils.toPrimitiveArray(lastEval));
+		network.setBiases(ArrayUtils.toPrimitiveArray(biases));
+		network.setLambdas(ArrayUtils.toPrimitiveArray(lambdas));
 		
 		Double[][] inputWeightsArray = new Double[inputWeights.size()][network.getNbInput()];
 		for (int i = 0; i < inputWeightsArray.length; i++) {
-			inputWeightsArray[i] = Utils.toArray(inputWeights.get(i));
+			inputWeightsArray[i] = ArrayUtils.toArray(inputWeights.get(i));
 		}
 		network.setInputWeights(inputWeightsArray);
 		
 		Double[][] weightsArray = new Double[weights.size()][weights.size()];
 		for (int i = 0; i < weightsArray.length; i++) {
-			weightsArray[i] = Utils.toArray(weights.get(i));
+			weightsArray[i] = ArrayUtils.toArray(weights.get(i));
 		}
 		network.setWeights(weightsArray);
 		

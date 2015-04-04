@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import tom.lib.netwolve.Function;
 import tom.lib.netwolve.MathUtils;
-import tom.lib.netwolve.services.NetworkFactory;
+import tom.lib.netwolve.services.NetworkUtils;
 
 public class NetworkTest {
 
@@ -28,7 +28,7 @@ public class NetworkTest {
 	@Test
 	public void mutationTest(){
 		Network network = new Network(6, 2, 3, 0.5, Function.SIGMOIDE);
-		NetworkFactory.mute(network, 1, 1, 0, 0, 0, 0);
+		NetworkUtils.mute(network, 1, 1, 0, 0, 0, 0);
 	}
 	
 	@Test
@@ -40,7 +40,7 @@ public class NetworkTest {
 				assertNull(network.getWeights()[i][j]);
 			}
 		}
-		NetworkFactory.mute(network, 1, 0, 1, 0, 0, 0);
+		NetworkUtils.mute(network, 1, 0, 1, 0, 0, 0);
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 6; j++) {
 				assertNotNull(network.getWeights()[i][j]);
@@ -57,7 +57,7 @@ public class NetworkTest {
 				assertNotNull(network.getWeights()[i][j]);
 			}
 		}
-		NetworkFactory.mute(network, 1, 1, 0, 1, 0, 0);
+		NetworkUtils.mute(network, 1, 1, 0, 1, 0, 0);
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 6; j++) {
 				assertNull(network.getWeights()[i][j]);
@@ -69,7 +69,7 @@ public class NetworkTest {
 	public void creationNeuroneTest(){
 		Network network = new Network(100, 2, 3, 1., Function.SIGMOIDE);
 		assertEquals(100, network.getBiases().length);
-		NetworkFactory.mute(network, 1, 0, 0, 0, 1, 0);
+		NetworkUtils.mute(network, 1, 0, 0, 0, 1, 0);
 		assertEquals(111, network.getBiases().length);
 	}
 	
@@ -77,7 +77,7 @@ public class NetworkTest {
 	public void deleteNeuroneTest(){
 		Network network = new Network(100, 2, 3, 1., Function.SIGMOIDE);
 		assertEquals(100, network.getBiases().length);
-		NetworkFactory.mute(network, 1, 0, 0, 0, 0, 1);
+		NetworkUtils.mute(network, 1, 0, 0, 0, 0, 1);
 		assertEquals(3, network.getBiases().length);
 	}
 }

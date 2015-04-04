@@ -3,8 +3,8 @@ package tom.lib.netwolve;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Utils {
-	private Utils() {};
+public class ArrayUtils {
+	private ArrayUtils() {};
 	
 	public static List<Double> toList(double[] array){
 		List<Double> list = new ArrayList<Double>();
@@ -36,5 +36,14 @@ public class Utils {
 			array[i] = list.get(i);
 		}
 		return array;
+	}
+	
+	public static Double[][] copy(Double[][] array){
+		Double[][] copy = new Double[array.length][];
+		for (int i = 0; i < array.length; i++) {
+			copy[i] = array[i].clone();
+		}
+		
+		return copy;
 	}
 }
