@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
+import tom.lib.netwolve.commun.Function;
 import tom.lib.netwolve.services.ArrayUtils;
-import tom.lib.netwolve.services.Function;
 import tom.lib.netwolve.services.MathUtils;
 
 public class Network {
@@ -135,12 +136,13 @@ public class Network {
 		}
 	}
 
+	
 	public double[] eval(double[] inputValue){
-		int nbNeuron = biases.length;
-		
 		if (layerOrder == null){
 			calculateLayerOrder();
 		}
+		
+		int nbNeuron = biases.length;
 		
 		double[] input = new double[inputWeights[0].length];
 		System.arraycopy(inputValue, 0, input, 0, Math.min(inputValue.length, input.length));
@@ -174,12 +176,7 @@ public class Network {
 	}
 
 	private double multiply(double x, Double weight){
-		if (weight == null){
-			return 0;
-		}
-		else{
-			return x*weight;
-		}
+		return Optional.ofNullable(weight).orElse(0.)*x;
 	}
 
 	public int getNbOutput() {

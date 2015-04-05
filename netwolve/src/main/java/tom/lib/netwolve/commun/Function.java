@@ -1,4 +1,4 @@
-package tom.lib.netwolve.services;
+package tom.lib.netwolve.commun;
 
 
 public abstract class Function{

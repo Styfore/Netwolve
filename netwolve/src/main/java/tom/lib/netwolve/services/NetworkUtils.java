@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import tom.lib.netwolve.elements.Network;
 
@@ -45,6 +46,7 @@ public class NetworkUtils {
 			biases.remove(deleted.get(i).intValue());
 			lambdas.remove(deleted.get(i).intValue());
 			inputWeights.remove(deleted.get(i).intValue());
+			
 			weights.remove(deleted.get(i).intValue());
 			for (List<Double>  weightList: weights) {
 				weightList.remove(deleted.get(i).intValue());
@@ -60,17 +62,19 @@ public class NetworkUtils {
 			lambdas.add(MathUtils.RANDOM.nextGaussian());
 			
 			List<Double> inputWeightList = new ArrayList<Double>();
+			
 			for (int i = 0; i < network.getNbInput(); i++) {
 				inputWeightList.add(null);
 			}
 			inputWeights.add(inputWeightList);
 			
 			List<Double> weightList = new ArrayList<Double>();
-			for (int i = 0; i < weights.size() + 1; i++) {
+			for (int i = 0; i < weights.size(); i++) {
+				weights.get(i).add(null);
 				weightList.add(null);
 			}
+			weightList.add(null);
 			weights.add(weightList);
-			
 			nbNew++;
 		}
 		
@@ -118,14 +122,15 @@ public class NetworkUtils {
 	        writer.write(Arrays.toString(network.getLastEval()).replace("[", "").replace("]", "").replace(", ", ";") +"\n");
 	        
 	        writer.write("\n");
-	        
 	        for (int i = 0; i < network.getInputWeights().length; i++) {
-	        	writer.write(Arrays.toString(network.getInputWeights()[i]).replace("[", "").replace("]", "").replace(", ", ";") +"\n");
+	        	String line = Arrays.stream(network.getInputWeights()[i]).map(w -> w!=null?Double.toString(w):"null").collect(Collectors.joining(";"));
+	        	writer.write(line +"\n");
 			}
 	        writer.write("\n");
 	    	
 	        for (int i = 0; i < network.getWeights().length; i++) {
-	        	writer.write(Arrays.toString(network.getWeights()[i]).replace("[", "").replace("]", "").replace(", ", ";") +"\n");
+	        	String line = Arrays.stream(network.getWeights()[i]).map(w -> w!=null?Double.toString(w):"null").collect(Collectors.joining(";"));
+	        	writer.write(line +"\n");
 			}
 	        writer.write("\n");
 	    	

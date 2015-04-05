@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import tom.lib.netwolve.services.Function;
+import tom.lib.netwolve.commun.Function;
 import tom.lib.netwolve.services.MathUtils;
 import tom.lib.netwolve.services.NetworkUtils;
 

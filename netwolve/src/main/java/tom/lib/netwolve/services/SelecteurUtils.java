@@ -1,60 +1,45 @@
 package tom.lib.netwolve.services;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import tom.lib.netwolve.interfaces.Copyable;
-import tom.lib.netwolve.interfaces.Mutable;
-import tom.lib.netwolve.interfaces.Scorable;
+import tom.lib.netwolve.commun.StatCollector;
+import tom.lib.netwolve.commun.Statistique;
+import tom.lib.netwolve.interfaces.Selectionnable;
+
+import com.google.common.collect.Lists;
 
 public class SelecteurUtils {
 
+	private SelecteurUtils() {}
 	
 	
+	public static Statistique selection(List<Selectionnable> population, double conservation){
+		Statistique stat = new Statistique();
+		stat.add(population.stream().mapToDouble(p -> p.getFitness()).toArray());
+
+		population.sort((o1, o2) -> Double.compare(o1.getFitness(), o2.getFitness()));
+		
+		List<Double> probas = Lists.newArrayList(0.);
+		population.stream().forEachOrdered(p -> probas.add(0, probas.get(0) + p.getFitness()/stat.getSum()));
+		probas.remove(probas.size() - 1);
+		
+		int nbKeeped = (int) (conservation*population.size());
+		SelectionnableSupplier supplier = new SelectionnableSupplier(population, probas);
+		
+		List<Selectionnable> newPopulation = Lists.newArrayList();
+		newPopulation.addAll(supplier.makeList(population.size() - nbKeeped));
+		newPopulation.parallelStream().forEach(p -> p.mute());
+		newPopulation.addAll(population.stream().skip(population.size() - nbKeeped).collect(Collectors.toList()));
+		
+		population.clear();
+		population.addAll(newPopulation);
+		
+		return stat;
+	}
 	
-	
-	
-	
-	
-	
-    public final static Comparator<Scorable> COMPARATOR = new Comparator<Scorable>() {
-        @Override
-        public int compare(Scorable o1, Scorable o2) {
-            return o1.compareScore(o2);
-        };
-    };
-   
-    public static <A extends Mutable> void mute(A[] population){
-        for (A a : population) {
-            a.mute();
-        }
-    }
-   
-    @SuppressWarnings("unchecked")
-    public static <A extends Mutable & Scorable & Copyable<A>> A[] select(A[] population){
-        Arrays.sort(population, COMPARATOR);
-       
-        double sommeScore = 0;
-       
-        for (int i = 0; i < population.length; i++) {
-            sommeScore = sommeScore + population[i].getScore();
-        }
-       
-        ArrayList<A> selected = new ArrayList<A>();
-        for (int i = 0; i < population.length; i++) {
-            double h = MathUtils.RANDOM.nextFloat()*sommeScore;
-            for (int j = 0; j < population.length; j++) {
-                if (population[j].getScore() < h){
-                    A a = population[j].copy();
-                    a.mute();
-                    selected.add(a);
-                    break;
-                }
-            }
-        }
-       
-        return selected.toArray((A[]) new Object[population.length]);
-    }
-   
+	public static Statistique selection(List<Selectionnable> population, double conservation, StatCollector<Selectionnable> collecteur){
+		collecteur.collect(population);
+		return selection(population, conservation);
+	}
 }
