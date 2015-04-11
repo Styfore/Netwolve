@@ -9,6 +9,7 @@ import tom.lib.netwolve.commun.StatCollector;
 import tom.lib.netwolve.commun.Statistique;
 import tom.lib.netwolve.elements.objets.SelectionnableTest;
 import tom.lib.netwolve.interfaces.Selectionnable;
+import tom.lib.netwolve.services.NetworkUtils;
 import tom.lib.netwolve.services.selection.FitnessOrder;
 import tom.lib.netwolve.services.selection.SelecteurUtils;
 import tom.lib.netwolve.services.selection.SelectionMethod;
@@ -57,6 +58,8 @@ public class SelectionTest {
 		for (int j = 0; j < 4; j++) {
 			System.out.println(Arrays.toString(SelectionnableTest.inputs[j]) + " => " + best.network.eval(SelectionnableTest.inputs[j])[0]);
 		}
+		
+		NetworkUtils.exportToCsv("target/test", best.network);
 	}
 
 }
