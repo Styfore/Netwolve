@@ -1,41 +1,26 @@
 package tom.lib.netwolve.services;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ArrayUtils {
 	private ArrayUtils() {};
 	
 	public static List<Double> toList(double[] array){
-		List<Double> list = new ArrayList<Double>();
-		for (double d : array) {
-			list.add(d);
-		}
-		return list;
+		return Arrays.stream(array).boxed().collect(Collectors.toList());
 	}
 	
 	public static List<Double> toList(Double[] array){
-		List<Double> list = new ArrayList<Double>();
-		for (Double d : array) {
-			list.add(d);
-		}
-		return list;
+		return Arrays.stream(array).collect(Collectors.toList());
 	}
 	
 	public static double[] toPrimitiveArray(List<Double> list){
-		double[] array = new double[list.size()];
-		for (int i = 0; i < list.size(); i++) {
-			array[i] = list.get(i);
-		}
-		return array;
+		return list.stream().mapToDouble(Double::doubleValue).toArray();
 	}
 	
 	public static Double[] toArray(List<Double> list){
-		Double[] array = new Double[list.size()];
-		for (int i = 0; i < list.size(); i++) {
-			array[i] = list.get(i);
-		}
-		return array;
+		return list.toArray(new Double[]{});
 	}
 	
 	public static Double[][] copy(Double[][] array){
