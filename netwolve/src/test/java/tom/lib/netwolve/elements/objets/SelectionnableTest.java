@@ -40,7 +40,7 @@ public class SelectionnableTest implements Selectionnable{
 
 	@Override
 	public Double getFitness() {
-		return 1/(1 + score);
+		return score;
 	}
 
 	@Override

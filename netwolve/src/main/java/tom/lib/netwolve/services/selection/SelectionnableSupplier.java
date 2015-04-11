@@ -1,4 +1,4 @@
-package tom.lib.netwolve.services;
+package tom.lib.netwolve.services.selection;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import tom.lib.netwolve.interfaces.Selectionnable;
+import tom.lib.netwolve.services.MathUtils;
 
 public class SelectionnableSupplier implements Supplier<Selectionnable> {
 	

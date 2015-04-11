@@ -1,4 +1,4 @@
-package tom.lib.netwolve.services;
+package tom.lib.netwolve.services.selection;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,16 +14,11 @@ public class SelecteurUtils {
 	private SelecteurUtils() {}
 	
 	
-	public static Statistique selection(List<Selectionnable> population, double conservation){
+	public static Statistique selection(List<Selectionnable> population, double conservation, SelectionMethod selectionMethod, FitnessOrder fitnessOrder){
 		Statistique stat = new Statistique();
 		stat.add(population.stream().mapToDouble(p -> p.getFitness()).toArray());
 
-		population.sort((o1, o2) -> Double.compare(o1.getFitness(), o2.getFitness()));
-		
-		List<Double> probas = Lists.newArrayList(0.);
-		population.stream().forEachOrdered(p -> probas.add(0, probas.get(0) + p.getFitness()/stat.getSum()));
-		probas.remove(probas.size() - 1);
-		
+		List<Double> probas = selectionMethod.getProbas(fitnessOrder, population, stat.getSum());
 		int nbKeeped = (int) (conservation*population.size());
 		SelectionnableSupplier supplier = new SelectionnableSupplier(population, probas);
 		
@@ -38,8 +33,8 @@ public class SelecteurUtils {
 		return stat;
 	}
 	
-	public static Statistique selection(List<Selectionnable> population, double conservation, StatCollector<Selectionnable> collecteur){
+	public static Statistique selection(List<Selectionnable> population, double conservation, SelectionMethod selectionMethod, FitnessOrder fitnessOrder, StatCollector<Selectionnable> collecteur){
 		collecteur.collect(population);
-		return selection(population, conservation);
+		return selection(population, conservation, selectionMethod, fitnessOrder);
 	}
 }

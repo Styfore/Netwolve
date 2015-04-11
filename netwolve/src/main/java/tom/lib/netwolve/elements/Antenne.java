@@ -19,15 +19,9 @@ public class Antenne  {
 		Arrays.fill(lengths, 1f/length);
 	}
 	
-	public float[] eval(float[] inputs) {
-		float[] capteurs = new float[lengths.length];
-		Arrays.fill(capteurs, 0);
-		
-		for (int i = 0; i < inputs.length; i++) {
-			
-		}
-		
-		return capteurs;
-	}
 	
+	private void capte(double x, double y, double level){
+		
+	}
+
 }
