@@ -20,7 +20,7 @@ public class ArrayUtils {
 	}
 	
 	public static Double[] toArray(List<Double> list){
-		return list.toArray(new Double[]{});
+		return list.stream().map(Double::new).toArray(Double[]::new);
 	}
 	
 	public static Double[][] copy(Double[][] array){

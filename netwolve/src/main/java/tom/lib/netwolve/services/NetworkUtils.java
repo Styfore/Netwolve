@@ -116,21 +116,21 @@ public class NetworkUtils {
 
 		// Ouverture d'un Writer en écriture :
 	    try ( BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8) ) {
-	        writer.write(network.getNbInput() + ";" + network.getNbOutput() + "\n");
-	        writer.write(Arrays.toString(network.getBiases()).replace("[", "").replace("]", "").replace(", ", ";") +"\n");
-	        writer.write(Arrays.toString(network.getLambdas()).replace("[", "").replace("]", "").replace(", ", ";") +"\n");
-	        writer.write(Arrays.toString(network.getLastEval()).replace("[", "").replace("]", "").replace(", ", ";") +"\n");
+	        writer.write(String.join(";", Integer.toString(network.getNbInput()),  Integer.toString(network.getNbOutput()), "\n"));
+	        
+	        writer.write(Arrays.stream(network.getBiases()).boxed().map(d -> d.toString()).collect(Collectors.joining(";", "", "\n")));
+	        writer.write(Arrays.stream(network.getLastEval()).boxed().map(d -> d.toString()).collect(Collectors.joining(";", "", "\n")));
+	        writer.write(Arrays.stream(network.getLastEval()).boxed().map(d -> d.toString()).collect(Collectors.joining(";", "", "\n")));
 	        
 	        writer.write("\n");
+	        
 	        for (int i = 0; i < network.getInputWeights().length; i++) {
-	        	String line = Arrays.stream(network.getInputWeights()[i]).map(w -> w!=null?Double.toString(w):"null").collect(Collectors.joining(";"));
-	        	writer.write(line +"\n");
+	        	writer.write(Arrays.stream(network.getInputWeights()[i]).map(w -> w!=null?Double.toString(w):"null").collect(Collectors.joining(";", "", "\n")));
 			}
 	        writer.write("\n");
 	    	
 	        for (int i = 0; i < network.getWeights().length; i++) {
-	        	String line = Arrays.stream(network.getWeights()[i]).map(w -> w!=null?Double.toString(w):"null").collect(Collectors.joining(";"));
-	        	writer.write(line +"\n");
+	        	writer.write(Arrays.stream(network.getWeights()[i]).map(w -> w!=null?Double.toString(w):"null").collect(Collectors.joining(";", "", "\n")));
 			}
 	        writer.write("\n");
 	    	

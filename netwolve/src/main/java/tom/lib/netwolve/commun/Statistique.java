@@ -3,7 +3,6 @@ package tom.lib.netwolve.commun;
 import java.util.Arrays;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 
@@ -86,21 +85,5 @@ public class Statistique {
 		return "[average=" + getAverage() + ", standardDeviation="
 				+ getStandardDeviation() + ", max=" + getMax()  + ", min=" + getMin() + ", sum=" + getSum() +  ", elements="
 				+ elements + "]";
-	}
-
-	public static void main(String[] args) {
-		Statistique s = new Statistique();
-		s.add(12, 20, 5, 2, 1);
-		System.out.println(s);
-		List<Double> l = s.getElements();
-		System.out.println(l);
-		l.sort((o1, o2) -> Double.compare(o1, o2));
-		l.parallelStream().forEach(d -> d = d/s.getSum());
-		l = l.parallelStream().mapToDouble(d -> d/s.getSum()).boxed().collect(Collectors.toList());
-		System.out.println(l);
-		
-		List<Double> p = Lists.newArrayList(0.);
-		l.stream().forEachOrdered(d -> p.add(0, p.get(0) + d));
-		System.out.println(p);
 	}
 }
