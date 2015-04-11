@@ -2,6 +2,8 @@ package tom.lib.netwolve.elements.objets;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import tom.lib.netwolve.commun.Collectable;
 import tom.lib.netwolve.commun.Function;
 import tom.lib.netwolve.elements.Network;
@@ -55,6 +57,6 @@ public class SelectionnableTest implements Selectionnable{
 
 	@Override
 	public List<? extends Selectionnable> cross(Selectionnable s) {
-		return null;
+		return Lists.newArrayList(this, this, this);
 	}
 }

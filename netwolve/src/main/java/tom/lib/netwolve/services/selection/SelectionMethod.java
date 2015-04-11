@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 
 public enum SelectionMethod {
 
-	PROPORTIONATE {
+	PROPORTIONATE_WHEEL {
 		@Override
 		public List<Double> getProbas(FitnessOrder fitnessOrder, List<Selectionnable> population, double fitnessSum) {
 			List<Double> probas;
@@ -39,7 +39,7 @@ public enum SelectionMethod {
 		}
 	},
 	
-	WHEEL {
+	RANGE_WHEEL {
 		@Override
 		public List<Double> getProbas(FitnessOrder fitnessOrder, List<Selectionnable> population, double fitnessSum) {
 			List<Double> probas;

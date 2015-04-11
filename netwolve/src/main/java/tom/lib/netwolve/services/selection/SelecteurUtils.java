@@ -13,28 +13,52 @@ public class SelecteurUtils {
 
 	private SelecteurUtils() {}
 	
-	
-	public static Statistique selection(List<Selectionnable> population, double conservation, SelectionMethod selectionMethod, FitnessOrder fitnessOrder){
+	public static Statistique selection(List<Selectionnable> population, double crossoverRate, double conservationRate, SelectionMethod selectionMethod, FitnessOrder fitnessOrder){
 		Statistique stat = new Statistique();
 		stat.add(population.stream().mapToDouble(p -> p.getFitness()).toArray());
 
+		// On calcule la proba pour chaque élement d'être sélectionné
 		List<Double> probas = selectionMethod.getProbas(fitnessOrder, population, stat.getSum());
-		int nbKeeped = (int) (conservation*population.size());
 		SelectionnableSupplier supplier = new SelectionnableSupplier(population, probas);
 		
+		int nbKeeped = (int) (conservationRate*population.size());
+		int nbCrossover = (int) (crossoverRate*(population.size() - nbKeeped));
+		
+		// clones
 		List<Selectionnable> newPopulation = Lists.newArrayList();
-		newPopulation.addAll(supplier.makeList(population.size() - nbKeeped));
+		newPopulation.addAll(supplier.makeList(population.size() - nbKeeped - nbCrossover));
+		
+		// crossovers
+		List<Selectionnable> crossoverPopulation = Lists.newArrayList();
+		while (crossoverPopulation.size() < nbCrossover){
+			crossoverPopulation.addAll(supplier.get().cross(supplier.get()));
+		}
+		newPopulation.addAll(crossoverPopulation.stream().limit(nbCrossover).collect(Collectors.toList()));
+		
+		// mutations
 		newPopulation.parallelStream().forEach(p -> p.mute());
+		
+		// On garde les nbKeeped meilleurs
 		newPopulation.addAll(population.stream().skip(population.size() - nbKeeped).collect(Collectors.toList()));
 		
 		population.clear();
 		population.addAll(newPopulation);
-		
 		return stat;
 	}
 	
-	public static Statistique selection(List<Selectionnable> population, double conservation, SelectionMethod selectionMethod, FitnessOrder fitnessOrder, StatCollector<Selectionnable> collecteur){
+	
+	public static Statistique selection(List<Selectionnable> population, double conservationRate, SelectionMethod selectionMethod, FitnessOrder fitnessOrder){
+		return selection(population, 0., conservationRate, selectionMethod, fitnessOrder);
+	}
+	
+	
+	public static Statistique selection(List<Selectionnable> population, double conservationRate, SelectionMethod selectionMethod, FitnessOrder fitnessOrder, StatCollector<Selectionnable> collecteur){
 		collecteur.collect(population);
-		return selection(population, conservation, selectionMethod, fitnessOrder);
+		return selection(population, conservationRate, selectionMethod, fitnessOrder);
+	}
+	
+	public static Statistique selection(List<Selectionnable> population, double crossoverRate, double conservationRate, SelectionMethod selectionMethod, FitnessOrder fitnessOrder, StatCollector<Selectionnable> collecteur){
+		collecteur.collect(population);
+		return selection(population, crossoverRate, conservationRate, selectionMethod, fitnessOrder);
 	}
 }

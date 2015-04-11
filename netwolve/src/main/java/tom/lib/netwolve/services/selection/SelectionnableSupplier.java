@@ -19,6 +19,9 @@ public class SelectionnableSupplier implements Supplier<Selectionnable> {
 	}
 	
 	@Override
+	/**
+	 * Renvoie aléatoirement un éléments de la populations (selon sa probabilité)
+	 */
 	public Selectionnable get() {
 		double r = MathUtils.RANDOM.nextDouble();
 		int i;

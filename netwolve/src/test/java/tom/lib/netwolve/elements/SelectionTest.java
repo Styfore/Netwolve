@@ -31,13 +31,13 @@ public class SelectionTest {
 
 		StatCollector<Selectionnable> collecteur;
 		StatCollector<Statistique> collecteurStat = new StatCollector<>(Statistique.class);
-		Statistique stat = SelecteurUtils.selection(pop, 0.2, SelectionMethod.PROPORTIONATE, FitnessOrder.DESC);
+		Statistique stat = SelecteurUtils.selection(pop, 0.2, SelectionMethod.PROPORTIONATE_WHEEL, FitnessOrder.DESC);
 		System.out.println("max = " + stat.getMax());
 		while (stat.getMin() > 0.0001) {
 			collecteur = new StatCollector<>(SelectionnableTest.class);
 			pop.parallelStream().map(s -> (SelectionnableTest) s).forEach(p -> p.eval());
 
-			System.out.println(stat = SelecteurUtils.selection(pop, 0.2, SelectionMethod.PROPORTIONATE, FitnessOrder.DESC, collecteur));
+			System.out.println(stat = SelecteurUtils.selection(pop, 0.2, SelectionMethod.PROPORTIONATE_WHEEL, FitnessOrder.DESC, collecteur));
 			System.out.println(collecteur.get("NB_NEURONE")+"\n");
 
 			nbNeurone.add(collecteur.get("NB_NEURONE").getAverage());
