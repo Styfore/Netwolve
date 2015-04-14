@@ -15,22 +15,16 @@ public enum SelectionMethod {
 			int size = population.size();
 			if (size > 1){
 				population.sort((o1, o2) -> fitnessOrder.getOrder()*Double.compare(o1.getFitness(), o2.getFitness()));
-				switch (fitnessOrder) {
-				case ASC:
-					probas = Lists.newArrayList(0.);
-					population.stream().forEachOrdered(p -> probas.add(0, probas.get(0) + p.getFitness()/fitnessSum));
-					probas.remove(probas.size() - 1);
-					break;
-				case DESC:
-					double correction = (size - 1)*fitnessSum;
-					probas = Lists.newArrayList(0.);
-					population.stream().forEachOrdered(p -> probas.add(0, probas.get(0) + (fitnessSum - p.getFitness())/(correction)));
-					probas.remove(probas.size() - 1);
-					break;
-				default:
-					probas = Lists.newArrayList();
-					break;
+				final double correction;
+				if (FitnessOrder.DESC.equals(fitnessOrder)){
+					correction =  (size - 1)*fitnessSum;
 				}
+				else{
+					correction = fitnessSum;
+				}
+				probas = Lists.newArrayList(0.);
+				population.stream().forEachOrdered(p -> probas.add(probas.get(probas.size()-1) + (fitnessSum - p.getFitness())/(correction)));
+				probas.remove(0);
 			}
 			else{
 				probas = Lists.newArrayList(1.);
@@ -47,8 +41,9 @@ public enum SelectionMethod {
 			if (size > 1){
 				probas = Lists.newArrayList();
 				population.sort((o1, o2) -> fitnessOrder.getOrder()*Double.compare(o1.getFitness(), o2.getFitness()));
+
 				double sum = size*(size + 1)/2;
-				for (int i = size; i > 0 ; i--) {
+				for (int i = 1; i <= size ; i++) {
 					probas.add(i*(i+1)/(2*sum));
 				}
 			}

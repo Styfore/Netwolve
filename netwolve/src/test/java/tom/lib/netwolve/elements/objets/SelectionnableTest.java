@@ -17,8 +17,8 @@ public class SelectionnableTest implements Selectionnable{
 	double score;
 	public static double[][] inputs = new double[][]{new double[]{0., 0.}, new double[]{1., 0.}, new double[]{0., 1.}, new double[]{1., 1.}};
 	public static double[] output = new double[]{0., 1., 1., 0.};
-
-
+	boolean isEval = false;
+	
 	public SelectionnableTest() {
 		network = new Network(5, 2, 1, MathUtils.RANDOM.nextDouble(), Function.SIGMOIDE);
 	}
@@ -33,6 +33,7 @@ public class SelectionnableTest implements Selectionnable{
 		for (int i = 0; i < inputs.length; i++) {
 			score = score + Math.pow(output[i] - network.eval(inputs[i])[0], 2);
 		}
+		isEval = true;
 	}
 
 	@Collectable(name="NB_NEURONE")
@@ -42,21 +43,27 @@ public class SelectionnableTest implements Selectionnable{
 
 	@Override
 	public Double getFitness() {
+		if (!isEval){
+			eval();
+		}
 		return score;
 	}
 
 	@Override
 	public void mute() {
 		NetworkUtils.mute(network, 1, 0.1, 0.1, 0.1, 0.1, 0.1);
+		isEval = false;
 	}
 
 	@Override
 	public Selectionnable copy() {
+		isEval = false;
 		return new SelectionnableTest(network);
 	}
 
 	@Override
 	public List<? extends Selectionnable> cross(Selectionnable s) {
+		isEval = false;
 		return Lists.newArrayList(this, this, this);
 	}
 }

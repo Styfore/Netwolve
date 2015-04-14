@@ -1,6 +1,7 @@
 package tom.lib.netwolve.services.selection;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import tom.lib.netwolve.commun.StatCollector;
@@ -60,5 +61,35 @@ public class SelecteurUtils {
 	public static Statistique selection(List<Selectionnable> population, double crossoverRate, double conservationRate, SelectionMethod selectionMethod, FitnessOrder fitnessOrder, StatCollector<Selectionnable> collecteur){
 		collecteur.collect(population);
 		return selection(population, crossoverRate, conservationRate, selectionMethod, fitnessOrder);
+	}
+	
+	public static StatCollector<Statistique> selection(List<Selectionnable> population, double crossoverRate, double conservationRate, SelectionMethod selectionMethod, FitnessOrder fitnessOrder, Predicate<Statistique> stopCondition){
+		Statistique stat = new Statistique();
+		StatCollector<Statistique> metastat = new StatCollector<>(Statistique.class);
+		while (stopCondition.test(stat)) {
+			stat = selection(population, crossoverRate, conservationRate, selectionMethod, fitnessOrder);
+			metastat.collect(stat);
+		}
+		return metastat;
+	}
+	
+	public static StatCollector<Statistique> selection(List<Selectionnable> population, double crossoverRate, SelectionMethod selectionMethod, FitnessOrder fitnessOrder, Predicate<Statistique> stopCondition){
+		Statistique stat = new Statistique();
+		StatCollector<Statistique> metastat = new StatCollector<>(Statistique.class);
+		while (stopCondition.test(stat) || stat.getElements().size() == 0) {
+			stat = selection(population, crossoverRate, selectionMethod, fitnessOrder);
+			metastat.collect(stat);
+		}
+		return metastat;
+	}
+	
+	public static StatCollector<Statistique> selection(List<Selectionnable> population, double crossoverRate, SelectionMethod selectionMethod, FitnessOrder fitnessOrder, Predicate<Statistique> stopCondition, int maxGeneration){
+		Statistique stat = new Statistique();
+		StatCollector<Statistique> metastat = new StatCollector<>(Statistique.class);
+		while (stopCondition.test(stat) && metastat.size() < maxGeneration || stat.getElements().size() == 0) {
+			stat = selection(population, crossoverRate, selectionMethod, fitnessOrder);
+			metastat.collect(stat);
+		}
+		return metastat;
 	}
 }

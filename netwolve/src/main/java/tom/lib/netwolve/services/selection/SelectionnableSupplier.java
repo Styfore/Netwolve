@@ -25,11 +25,14 @@ public class SelectionnableSupplier implements Supplier<Selectionnable> {
 	public Selectionnable get() {
 		double r = MathUtils.RANDOM.nextDouble();
 		int i;
-		for (i = probas.size() - 1; i >= 0 ; i--) {
-			if (r <= probas.get(i))
+		for (i = 0; i < probas.size() ; i++) {
+			if (r <= probas.get(i)){
 				break;
+			}
 		}
-		return population.get(population.size() - i - 1).copy();
+		
+		i = Math.min(i, probas.size() - 1);
+		return population.get(i).copy();
 	}
 	
 	public Stream<Selectionnable> makeStream(){

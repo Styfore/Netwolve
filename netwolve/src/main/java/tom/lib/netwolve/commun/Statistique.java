@@ -76,6 +76,10 @@ public class Statistique {
 		return max;
 	}
 	
+	public int size(){
+		return elements.size();
+	}
+	
 	public List<Double> getElements() {
 		return Lists.newArrayList(elements);
 	}

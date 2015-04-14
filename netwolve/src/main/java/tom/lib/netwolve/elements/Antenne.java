@@ -12,6 +12,7 @@ public class Antenne  {
 	
 	public Antenne(float[] lengths) {
 		this.lengths = lengths;
+		// SOmmes pondérées
 	}
 
 	public Antenne(int length) {
@@ -21,6 +22,10 @@ public class Antenne  {
 	
 	
 	private void capte(double x, double y, double level){
+		// On calcul l'angle d'arrivé
+		double theta = Math.atan2(y - this.y, x - this.x) - orientation;
+		double r = Math.sqrt((x - this.x)*(x - this.x) + (y - this.y)*(y - this.y));
+		
 		
 	}
 
