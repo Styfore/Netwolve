@@ -1,8 +1,8 @@
-package tom.lib.netwolve.interfaces;
+package tom.lib.genetic.interfaces;
 
 import java.util.List;
 
-import tom.lib.netwolve.commun.Collectable;
+import tom.lib.statistics.Collectable;
 
 
 public interface Selectionnable {

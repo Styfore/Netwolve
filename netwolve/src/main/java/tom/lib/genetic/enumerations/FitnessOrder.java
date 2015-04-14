@@ -1,4 +1,4 @@
-package tom.lib.netwolve.services.selection;
+package tom.lib.genetic.enumerations;
 
 public enum FitnessOrder {
 

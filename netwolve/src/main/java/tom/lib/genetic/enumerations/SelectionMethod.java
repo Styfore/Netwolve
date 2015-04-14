@@ -1,10 +1,9 @@
-package tom.lib.netwolve.services.selection;
+package tom.lib.genetic.enumerations;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import tom.lib.netwolve.interfaces.Selectionnable;
-
-import com.google.common.collect.Lists;
+import tom.lib.genetic.interfaces.Selectionnable;
 
 public enum SelectionMethod {
 
@@ -22,12 +21,14 @@ public enum SelectionMethod {
 				else{
 					correction = fitnessSum;
 				}
-				probas = Lists.newArrayList(0.);
+				probas = new ArrayList<>();
+				probas.add(0.);
 				population.stream().forEachOrdered(p -> probas.add(probas.get(probas.size()-1) + (fitnessSum - p.getFitness())/(correction)));
 				probas.remove(0);
 			}
 			else{
-				probas = Lists.newArrayList(1.);
+				probas = new ArrayList<>();
+				probas.add(1.);
 			}
 			return probas;
 		}
@@ -39,7 +40,7 @@ public enum SelectionMethod {
 			List<Double> probas;
 			int size = population.size();
 			if (size > 1){
-				probas = Lists.newArrayList();
+				probas = new ArrayList<>();
 				population.sort((o1, o2) -> fitnessOrder.getOrder()*Double.compare(o1.getFitness(), o2.getFitness()));
 
 				double sum = size*(size + 1)/2;
@@ -48,7 +49,8 @@ public enum SelectionMethod {
 				}
 			}
 			else{
-				probas = Lists.newArrayList(1.);
+				probas = new ArrayList<>();
+				probas.add(1.);
 			}
 			return probas;
 		}

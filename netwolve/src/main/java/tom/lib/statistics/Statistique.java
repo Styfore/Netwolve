@@ -1,10 +1,9 @@
-package tom.lib.netwolve.commun;
+package tom.lib.statistics;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 
 public class Statistique {
@@ -33,7 +32,7 @@ public class Statistique {
 	}
 	
 	public Statistique() {
-		elements = Lists.newArrayList();
+		elements = new ArrayList<>();
 		this.change = true;
 	}
 
@@ -81,7 +80,7 @@ public class Statistique {
 	}
 	
 	public List<Double> getElements() {
-		return Lists.newArrayList(elements);
+		return new ArrayList<>(elements);
 	}
 	
 	@Override
@@ -90,4 +89,5 @@ public class Statistique {
 				+ getStandardDeviation() + ", max=" + getMax()  + ", min=" + getMin() + ", sum=" + getSum() +  ", elements="
 				+ elements + "]";
 	}
+
 }

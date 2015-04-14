@@ -1,17 +1,17 @@
-package tom.lib.netwolve.services.selection;
+package tom.lib.genetic;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import tom.lib.netwolve.commun.StatCollector;
-import tom.lib.netwolve.commun.Statistique;
-import tom.lib.netwolve.interfaces.Selectionnable;
-
-import com.google.common.collect.Lists;
+import tom.lib.genetic.enumerations.FitnessOrder;
+import tom.lib.genetic.enumerations.SelectionMethod;
+import tom.lib.genetic.interfaces.Selectionnable;
+import tom.lib.statistics.StatCollector;
+import tom.lib.statistics.Statistique;
 
 public class SelecteurUtils {
-
 	private SelecteurUtils() {}
 	
 	public static Statistique selection(List<Selectionnable> population, double crossoverRate, double conservationRate, SelectionMethod selectionMethod, FitnessOrder fitnessOrder){
@@ -26,11 +26,11 @@ public class SelecteurUtils {
 		int nbCrossover = (int) (crossoverRate*(population.size() - nbKeeped));
 		
 		// clones
-		List<Selectionnable> newPopulation = Lists.newArrayList();
+		List<Selectionnable> newPopulation = new ArrayList<>();
 		newPopulation.addAll(supplier.makeList(population.size() - nbKeeped - nbCrossover));
 		
 		// crossovers
-		List<Selectionnable> crossoverPopulation = Lists.newArrayList();
+		List<Selectionnable> crossoverPopulation = new ArrayList<>();
 		while (crossoverPopulation.size() < nbCrossover){
 			crossoverPopulation.addAll(supplier.get().cross(supplier.get()));
 		}
@@ -63,33 +63,32 @@ public class SelecteurUtils {
 		return selection(population, crossoverRate, conservationRate, selectionMethod, fitnessOrder);
 	}
 	
-	public static StatCollector<Statistique> selection(List<Selectionnable> population, double crossoverRate, double conservationRate, SelectionMethod selectionMethod, FitnessOrder fitnessOrder, Predicate<Statistique> stopCondition){
+	
+	public static StatCollector<Statistique> selectionOverGeneration(List<Selectionnable> population, double crossoverRate, double conservationRate, SelectionMethod selectionMethod, FitnessOrder fitnessOrder, Predicate<Statistique> stopCondition){
 		Statistique stat = new Statistique();
 		StatCollector<Statistique> metastat = new StatCollector<>(Statistique.class);
-		while (stopCondition.test(stat)) {
+		while (stopCondition.test(stat) || stat.getElements().size() == 0) {
 			stat = selection(population, crossoverRate, conservationRate, selectionMethod, fitnessOrder);
 			metastat.collect(stat);
 		}
 		return metastat;
 	}
 	
-	public static StatCollector<Statistique> selection(List<Selectionnable> population, double crossoverRate, SelectionMethod selectionMethod, FitnessOrder fitnessOrder, Predicate<Statistique> stopCondition){
+	public static StatCollector<Statistique> selectionOverGeneration(List<Selectionnable> population, double conservationRate, SelectionMethod selectionMethod, FitnessOrder fitnessOrder, Predicate<Statistique> stopCondition){
+		return selectionOverGeneration(population, 0., conservationRate, selectionMethod, fitnessOrder, stopCondition);
+	}
+	
+	public static StatCollector<Statistique> selectionOverGeneration(List<Selectionnable> population, double crossoverRate, double conservationRate, SelectionMethod selectionMethod, FitnessOrder fitnessOrder, Predicate<Statistique> stopCondition, int maxGeneration){
 		Statistique stat = new Statistique();
 		StatCollector<Statistique> metastat = new StatCollector<>(Statistique.class);
-		while (stopCondition.test(stat) || stat.getElements().size() == 0) {
-			stat = selection(population, crossoverRate, selectionMethod, fitnessOrder);
+		while (stopCondition.test(stat) && metastat.size() < maxGeneration || stat.getElements().size() == 0) {
+			stat = selection(population, crossoverRate, conservationRate, selectionMethod, fitnessOrder);
 			metastat.collect(stat);
 		}
 		return metastat;
 	}
 	
-	public static StatCollector<Statistique> selection(List<Selectionnable> population, double crossoverRate, SelectionMethod selectionMethod, FitnessOrder fitnessOrder, Predicate<Statistique> stopCondition, int maxGeneration){
-		Statistique stat = new Statistique();
-		StatCollector<Statistique> metastat = new StatCollector<>(Statistique.class);
-		while (stopCondition.test(stat) && metastat.size() < maxGeneration || stat.getElements().size() == 0) {
-			stat = selection(population, crossoverRate, selectionMethod, fitnessOrder);
-			metastat.collect(stat);
-		}
-		return metastat;
+	public static StatCollector<Statistique> selectionOverGeneration(List<Selectionnable> population, double conservationRate, SelectionMethod selectionMethod, FitnessOrder fitnessOrder, Predicate<Statistique> stopCondition, int maxGeneration){
+		return selectionOverGeneration(population, 0., conservationRate, selectionMethod, fitnessOrder, stopCondition, maxGeneration);
 	}
 }

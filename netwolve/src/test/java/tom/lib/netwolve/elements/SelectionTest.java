@@ -1,27 +1,26 @@
 package tom.lib.netwolve.elements;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
 import org.junit.Test;
 
-import tom.lib.netwolve.commun.StatCollector;
-import tom.lib.netwolve.commun.Statistique;
+import tom.lib.genetic.SelecteurUtils;
+import tom.lib.genetic.enumerations.FitnessOrder;
+import tom.lib.genetic.enumerations.SelectionMethod;
+import tom.lib.genetic.interfaces.Selectionnable;
 import tom.lib.netwolve.elements.objets.SelectionnableTest;
-import tom.lib.netwolve.interfaces.Selectionnable;
 import tom.lib.netwolve.services.NetworkUtils;
-import tom.lib.netwolve.services.selection.FitnessOrder;
-import tom.lib.netwolve.services.selection.SelecteurUtils;
-import tom.lib.netwolve.services.selection.SelectionMethod;
-
-import com.google.common.collect.Lists;
+import tom.lib.statistics.StatCollector;
+import tom.lib.statistics.Statistique;
 
 public class SelectionTest {
 
 	@Test
 	public void selectionTestSimple(){
-		List<Selectionnable> pop = Lists.newArrayList();
+		List<Selectionnable> pop = new ArrayList<>();
 		for (int i = 0; i < 20; i++) {
 			pop.add(new SelectionnableTest());
 		}
@@ -33,14 +32,14 @@ public class SelectionTest {
 				return s.getMax() > 0.001;
 		};
 		
-		StatCollector<Statistique> stat = SelecteurUtils.selection(pop, 0.2, SelectionMethod.RANGE_WHEEL, FitnessOrder.DESC, arret);
+		StatCollector<Statistique> stat = SelecteurUtils.selectionOverGeneration(pop, 0.2, SelectionMethod.RANGE_WHEEL, FitnessOrder.DESC, arret);
 		System.out.println(String.format("En %s tours pour un fitnesse min de %s et un nombre de neurone moyen de %s", stat.size(), stat.get("MIN").getMin(), nbNeurone.getAverage()));
 		System.out.println(stat);
 	}
 	
 	@Test
 	public void selectionTest(){
-		List<Selectionnable> pop = Lists.newArrayList();
+		List<Selectionnable> pop = new ArrayList<>();
 		for (int i = 0; i < 20; i++) {
 			pop.add(new SelectionnableTest());
 		}
@@ -82,8 +81,8 @@ public class SelectionTest {
 	
 	@Test
 	public void moyenne(){
-		List<Selectionnable> popProp = Lists.newArrayList();
-		List<Selectionnable> popRange = Lists.newArrayList();
+		List<Selectionnable> popProp = new ArrayList<>();
+		List<Selectionnable> popRange = new ArrayList<>();
 		for (int i = 0; i < 20; i++) {
 			popProp.add(new SelectionnableTest());
 			popRange.add(new SelectionnableTest());

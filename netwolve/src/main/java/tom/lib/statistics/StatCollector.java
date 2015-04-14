@@ -1,12 +1,11 @@
-package tom.lib.netwolve.commun;
+package tom.lib.statistics;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import com.google.common.collect.Maps;
 
 public class StatCollector<E> {
 
@@ -15,8 +14,8 @@ public class StatCollector<E> {
 	private int size = 0;
 	
 	public StatCollector(Class<? extends E> clasz) {
-		stats = Maps.newHashMap();
-		methods = Maps.newHashMap();
+		stats = new HashMap<>();
+		methods = new HashMap<>();
 		for (Method method : clasz.getDeclaredMethods()) {
 			if (method.isAnnotationPresent(Collectable.class)){
 				String name = method.getAnnotation(Collectable.class).name();
@@ -34,7 +33,7 @@ public class StatCollector<E> {
 			try {
 				stats.get(key).add((Double) method.invoke(element));
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				throw new NetwolveRuntimeException(e);
+				throw new IllegalArgumentException(e);
 			}
 		}
 		size++;
@@ -50,9 +49,6 @@ public class StatCollector<E> {
 		return stats.get(property);
 	}
 	
-	public Collection<Statistique> get(){
-		return stats.values();
-	}
 	
 	@Override
 	public String toString() {
@@ -60,7 +56,7 @@ public class StatCollector<E> {
 		stats.forEach((name, stat) -> sb.append(name).append(" : ").append(stat).append("\n"));
 		return sb.toString();
 	}
-
+	
 	public int size() {
 		return size;
 	}
