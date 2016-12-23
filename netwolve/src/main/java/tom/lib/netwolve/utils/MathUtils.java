@@ -1,4 +1,4 @@
-package tom.lib.netwolve.services;
+package tom.lib.netwolve.utils;
 
 import java.util.Random;
 
@@ -8,7 +8,7 @@ public class MathUtils {
 	
 	public static final Random RANDOM = new Random();
 	
-	public static boolean hasard(double p){
+	public synchronized static boolean hasard(double p){
 		return RANDOM.nextDouble() <= p;
 	}
 	

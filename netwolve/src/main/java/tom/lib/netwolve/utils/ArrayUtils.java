@@ -1,4 +1,4 @@
-package tom.lib.netwolve.services;
+package tom.lib.netwolve.utils;
 
 import java.util.Arrays;
 import java.util.List;

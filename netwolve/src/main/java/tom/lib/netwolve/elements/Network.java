@@ -5,11 +5,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 
 import tom.lib.netwolve.commun.Function;
-import tom.lib.netwolve.services.ArrayUtils;
-import tom.lib.netwolve.services.MathUtils;
+import tom.lib.netwolve.utils.ArrayUtils;
+import tom.lib.netwolve.utils.MathUtils;
 
 public class Network {
 
@@ -29,6 +30,8 @@ public class Network {
 	private List<Set<Integer>> layerOrder = null;
 
 	public Network(int nbNeurons, int nbInput, int nbOutput, double connexionRate, Function activationFunction) {
+		Random random = new Random();
+		
 		assert(nbOutput <= nbNeurons);
 		assert(activationFunction != null);
 
@@ -45,18 +48,18 @@ public class Network {
 		this.nbInput = nbInput;
 		
 		for (int i = 0; i < nbNeurons; i++) {
-			biases[i] = MathUtils.RANDOM.nextGaussian();
-			lambdas[i] = MathUtils.RANDOM.nextGaussian();
+			biases[i] = random.nextGaussian();
+			lambdas[i] = random.nextGaussian();
 
 			for (int j = 0; j < weights.length; j++) {
 				if (MathUtils.hasard(connexionRate)){
-					weights[i][j] = MathUtils.RANDOM.nextGaussian();
+					weights[i][j] = random.nextGaussian();
 				}
 			}
 			
 			for (int j = 0; j < inputWeights[i].length; j++) {
 				if (MathUtils.hasard(connexionRate)){
-					inputWeights[i][j] = MathUtils.RANDOM.nextGaussian();
+					inputWeights[i][j] = random.nextGaussian();
 				}
 			}
 		}
@@ -167,12 +170,8 @@ public class Network {
 				lastEval[neuron] = currentEval[neuron];
 			}
 		}		
-		
-		// On récupère les sorties du réseau (qui sont les nbOutput premier neurones dans l'ordre des arrays)
-		double[] output = new double[nbOutput];
-		System.arraycopy(lastEval, 0, output, 0, nbOutput);
 
-		return output;
+		return lastEval;
 	}
 
 	private double multiply(double x, Double weight){

@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import tom.lib.netwolve.elements.Network;
+import tom.lib.netwolve.utils.ArrayUtils;
+import tom.lib.netwolve.utils.MathUtils;
 
-public class NetworkUtils {
+public class NetworkServices {
 
-	private NetworkUtils() {}
-	
 	public static void mute(Network network, double gaussianSd, double weightMutationRate, double newLinkRate, double deleteLinkRate, double newNeuronRate, double deleteNeuronRate){
 		List<Double> lastEval = ArrayUtils.toList(network.getLastEval());
 		
@@ -111,7 +111,7 @@ public class NetworkUtils {
 		network.calculateLayerOrder();
 	}
 
-	public static void exportToCsv(String pathFile, Network network){
+	public void exportToCsv(String pathFile, Network network){
 		Path path = Paths.get(pathFile);
 
 		// Ouverture d'un Writer en écriture :
