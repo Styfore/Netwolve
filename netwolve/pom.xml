@@ -12,25 +12,68 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<spring.version>4.1.7.RELEASE</spring.version>
+
+		<commons.beanutils.version>1.9.2</commons.beanutils.version>
+		<org.apache.commons.version>3.0</org.apache.commons.version>
+
+
+		<tom.lib.genetic.version>1</tom.lib.genetic.version>
+		<tom.lib.stat.version>1</tom.lib.stat.version>
+
+		<junit.version>4.11</junit.version>
+		<mockito.version>1.9.5</mockito.version>
 	</properties>
 
 	<dependencies>
+
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${org.apache.commons.version}</version>
 		</dependency>
+
 		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.9.5</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
-			<version>1.9.2</version>
+			<version>${commons.beanutils.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>tom.lib</groupId>
+			<artifactId>genetic</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/lib/genetic.jar</systemPath>
+		</dependency>
+
+		<!-- SCOPE TEST -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
@@ -51,4 +94,12 @@
 
 		</pluginManagement>
 	</build>
+
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+
 </project>
